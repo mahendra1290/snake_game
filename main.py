@@ -1,12 +1,12 @@
 import pygame, time, random, snake, food
 
-pygame.init()
 width  = 490
+pygame.init()
 height = 490
 feed_color = "asd"
 food_infom = 0
 tempss = 0
-game_cont = False
+game_cont = false
 colors = {
     'blue'   : (0, 0, 255),
     'red'    : (255, 0, 0),
@@ -18,7 +18,7 @@ colors = {
     'cyan'   : (156, 222, 254)
 }
 win    = pygame.display.set_mode((width, height))
-snakee = snake.Snake(7, (10, 130, 30), win)
+snakee = snake.Snake(7, (10, 130, 30), win, (width, height))
 foodss  = food.Food(7, 490)
 foods_1 = True
 not_touch = False
@@ -53,6 +53,9 @@ while run:
         food_check = snakee.get_snake()
         food_infom = food_cordinate(food_check)
         foods_1 = False
+
+    if snakee.self_collision():
+        game_cont = True
 
     for event in pygame.event.get():
         if event.type == pygame.KEYDOWN:
