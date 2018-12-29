@@ -6,6 +6,7 @@ height = 490
 feed_color = "asd"
 food_infom = 0
 tempss = 0
+game_cont = False
 colors = {
     'blue'   : (0, 0, 255),
     'red'    : (255, 0, 0),
@@ -41,7 +42,13 @@ def food_cordinate(food_check):
             return {'x': food_x, 'y':food_y, 'col':colors[feed_color]}
 
 while run:
-    win.fill((40, 40, 40))
+    while game_cont:
+        for event in pygame.event.get():
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_SPACE:
+                    game_cont = False
+
+    win.fill((10, 10, 10))
     if foods_1:
         food_check = snakee.get_snake()
         food_infom = food_cordinate(food_check)
@@ -49,6 +56,9 @@ while run:
 
     for event in pygame.event.get():
         if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_SPACE:
+                game_cont = True
+                break
             if event.key == pygame.K_UP:
                 snakee.move_up()
                 break
