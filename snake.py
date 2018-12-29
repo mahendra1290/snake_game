@@ -4,20 +4,22 @@ class Snake:
     move_list  = []
     pos_list   = []
     temp_point = (7,0,3,4)
-    def __init__(self, size, color, screen):
+    def __init__(self, size, color, screen, screen_size):
         self.color = color
         self.head_color = (155, 155, 155)
-        self.x = 0 
-        self.y = 0
+        self.x = screen_size[0]//7
+        self.y = screen_size[1]//7
         self.speed = 7
         self.width  = size
         self.height = size
         self.screen = screen
+        self.screen_size = screen_size
         for i in range(2):
             temp = ([self.speed, 0], [self.x, self.y ,self.width, self.height],self.color)
             self.snake_list.append(temp)
             self.x -= self.speed
-        self.x = 0
+        self.x = screen_size[0]//7
+        self.y = screen_size[1]//7
 
     def self_collision(self):
         head_x = self.snake_list[0][1][0]
@@ -122,9 +124,6 @@ class Snake:
             self.temp_point = (0, self.speed, self.x, self.y)
             self.move_list.append(self.temp_point)
             self.update_pos_list()
-
-
-    
 
 
 
