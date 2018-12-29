@@ -4,7 +4,6 @@ class Snake:
     move_list  = []
     pos_list   = []
     temp_point = (7,0,3,4)
-    #move_diret = [1, 0]
     def __init__(self, size, color, screen):
         self.color = color
         self.head_color = (155, 155, 155)
@@ -14,10 +13,6 @@ class Snake:
         self.width  = size
         self.height = size
         self.screen = screen
-        #self.rect   = ([self.speed, 0], [self.x, self.y, self.width, self.height])
-        #self.snake_list = [self.rect]
-        #self.head_circle = (self.screen, self.color, [3.5, 3.5], 3.5)
-        #self.snake_list.append(self.head_circle)
         for i in range(2):
             temp = ([self.speed, 0], [self.x, self.y ,self.width, self.height],self.color)
             self.snake_list.append(temp)
@@ -28,19 +23,16 @@ class Snake:
         last_x = self.snake_list[-1][1][0]
         last_y = self.snake_list[-1][1][1]
         last_xx = self.snake_list[-2][1][0]
-        last_yy = self.snake_list[-2][1][1]
-        #print(f"last_x {last_x} and last_y {last_y}")
-        #print(f"last_xx {last_xx} and last_yy {last_yy}")
         x = self.snake_list[-1][0][0]
         y = self.snake_list[-1][0][1]
         if last_x == last_xx:
-            print("y ", y)
+            #print("y ", y)
             temp = ([x, y],[last_x, last_y-y, self.width, self.height], color)
-            print("x_axis")
+            #print("x_axis")
         else:
-            print("x ", x)
+            #print("x ", x)
             temp = ([x, y],[last_x-x, last_y, self.height, self.width], color)
-            print("y_axis")
+            #print("y_axis")
         self.snake_list.append(temp)
 
     def update_pos_list(self):
