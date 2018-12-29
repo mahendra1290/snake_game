@@ -19,6 +19,20 @@ class Snake:
             self.x -= self.speed
         self.x = 0
 
+    def self_collision(self):
+        head_x = self.snake_list[0][1][0]
+        head_y = self.snake_list[0][1][1]
+        for i in range(1, len(self.snake_list)):
+            point_x = self.snake_list[i][1][0]
+            point_y = self.snake_list[i][1][1]
+            if (head_x == point_x and head_y == point_y):
+                print("Game Over")
+                return True
+            elif (head_x == -7 or head_x == 497) or (head_y == -7 or head_y == 497):
+                print("Game Over by boundary")
+                return True
+        return False 
+
     def update_snake(self, color):
         last_x = self.snake_list[-1][1][0]
         last_y = self.snake_list[-1][1][1]
