@@ -1,35 +1,70 @@
 import pygame
 class Snake:
     snake_list = []
-    head_direct  = {'x':0, 'y':0}
-    head_cord    = {'x':0, 'y':0}
+    snake_part = []
+    head_direct  = {'x':0, 'y':0, 'dir':'e', 'chng':'-'}
+    head_cord    = {'x':0, 'y':0, 'dir':'e', 'chng':'-'}
     snake_lenth  = 0
-    def __init__(self, size, color, screen, screen_size, speed):
-        self.color = color
-        self.head_color = (155, 155, 155)
-        self.x = 0
-        self.y = 0
+    temp_direct  = 'e'
+    change = False
+    def __init__(self, screen, screen_size, speed, snake):
+        self.head = snake['head']
+        self.tail = snake['tail']
+        self.body = snake['body']
         self.speed = speed
-        self.size  = size
         self.screen = screen
         self.screen_size = screen_size
         self.head_direct['x'] = self.speed
-        temp = {'x':0, 'y':0, 'color':self.color}
+        self.snake_part.append(self.head)
         self.snake_list.append(self.head_cord)
         self.snake_lenth += 1
-        temp = {'x':-self.speed, 'y':0, 'color':self.color}
+
+        for i in range(1, 20):
+            temp = {'x':-self.speed*i, 'y':0, 'dir':'e', 'chng':'-'}
+            self.snake_list.append(temp)
+            self.snake_part.append(self.body)
+            self.snake_lenth += 1
+
+        temp = {'x':-self.speed*20, 'y':0, 'dir':'e', 'chng':'-'}
         self.snake_list.append(temp)
+        self.snake_part.append(self.tail)
         self.snake_lenth += 1
         
     def snake_move(self):
-        self.head_cord['x'] += self.head_direct['x']
-        self.head_cord['y'] += self.head_direct['y']
+        self.head_cord['x']  += self.head_direct['x']
+        self.head_cord['y']  += self.head_direct['y']
+        self.head_cord['dir'] = self.head_direct['dir']
+        self.head_cord['chng'] = self.head_direct['chng']
         temp = self.head_cord.copy()
         self.snake_list.append(temp)
+        if self.change:
+            self.snake_list[-2]['dir'] = self.head_direct['dir']
+            self.snake_list[-2]['chng'] = self.head_direct['chng']
+        self.head_direct['chng'] = '-'
         if len(self.snake_list) > self.snake_lenth:
             self.snake_list.remove(self.snake_list[0])
-        for i in self.snake_list:
-            pygame.draw.rect(self.screen, self.color,[i['x'], i['y'], self.size, self.size])
+        #print(self.snake_list)
+        z = -1
+        for i, j in zip(self.snake_list, self.snake_part):
+            if (i['chng'] != '-') and (self.snake_part.index(j) != 0 and self.snake_part.index(j) != (len(self.snake_part)-1)):
+                self.screen.blit(self.snake_part[z][i['chng']], (i['x'], i['y']))
+
+            elif self.snake_part.index(j) == 0:
+                offset = {'w':[0, 0], 'e':[-5, 0], 'n':[0, 0], 's':[0, -5]}
+                temp_direc = i['dir']
+                self.screen.blit(self.snake_part[z][i['dir']], (i['x']+offset[temp_direc][0], i['y']+offset[temp_direc][1]))
+
+            elif self.snake_part.index(j) == (len(self.snake_part)-1):
+                offset = {'w':[-5, 0], 'e':[0, 0], 'n':[0, -5], 's':[0, 0]}
+                temp_direc = i['dir']
+                self.screen.blit(self.snake_part[z][i['dir']], (i['x']+offset[temp_direc][0], i['y']+offset[temp_direc][1]))
+            else:
+                self.screen.blit(self.snake_part[z][i['dir']], (i['x'], i['y']))
+
+            if self.change:
+                self.snake_list[-1]['chng'] = '-'
+                self.change = False
+            z -= 1
 
     def update_snake(self, color):
         pass
@@ -47,29 +82,33 @@ class Snake:
             end_y = self.snake_list[-1][1][1]
             return {'x':end_x, 'y':end_y}
 
-    def move_left(self):
-        """to change direction to left"""
-        if (self.head_direct['x'] is not self.speed) and (self.head_direct['x'] is not -self.speed):
-            self.head_direct['x'] = -self.speed
+    def turn_left_right(self, right=True):
+        """move right by default"""
+        if self.head_direct['x'] is 0:
+            t_dir = self.head_direct['dir']
+            if right:
+                self.head_direct['x'] = self.speed
+                self.head_direct['dir'] = 'e'
+            else:
+                self.head_direct['x'] = -self.speed
+                self.head_direct['dir'] = 'w'
+            self.head_direct['chng'] = t_dir+self.head_direct['dir'] 
             self.head_direct['y'] = 0
+            self.change = True
 
-    def move_right(self):
-        """to change direction to right"""
-        if (self.head_direct['x'] is not self.speed) and (self.head_direct['x'] is not -self.speed):
-            self.head_direct['x'] = self.speed
-            self.head_direct['y'] = 0
-
-    def move_up(self):
-        """to change direction to up"""
-        if (self.head_direct['y'] is not self.speed) and (self.head_direct['y'] is not -self.speed):
-            self.head_direct['y'] = -self.speed
+    def turn_up_down(self, down=True):
+        """move down by default"""
+        if self.head_direct['y'] is 0:
+            t_dir = self.head_direct['dir']
+            if down:
+                self.head_direct['y'] = self.speed   
+                self.head_direct['dir'] = 's'
+            else:
+                self.head_direct['y'] = -self.speed
+                self.head_direct['dir'] = 'n'
+            self.head_direct['chng'] = t_dir+self.head_direct['dir']
             self.head_direct['x'] = 0
-
-    def move_down(self):
-        """to change direction to down"""
-        if (self.head_direct['y'] is not self.speed) and (self.head_direct['y'] is not -self.speed):
-            self.head_direct['y'] = self.speed
-            self.head_direct['x'] = 0
+            self.change = True
 
 
 
