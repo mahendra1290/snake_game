@@ -19,13 +19,13 @@ class Snake:
         self.snake_list.append(self.head_cord)
         self.snake_lenth += 1
 
-        for i in range(1, 20):
+        for i in range(1, 2):
             temp = {'x':-self.speed*i, 'y':0, 'dir':'e', 'chng':'-'}
             self.snake_list.append(temp)
             self.snake_part.append(self.body)
             self.snake_lenth += 1
 
-        temp = {'x':-self.speed*20, 'y':0, 'dir':'e', 'chng':'-'}
+        temp = {'x':-self.speed*2, 'y':0, 'dir':'e', 'chng':'-'}
         self.snake_list.append(temp)
         self.snake_part.append(self.tail)
         self.snake_lenth += 1
@@ -60,27 +60,37 @@ class Snake:
                 self.screen.blit(self.snake_part[z][i['dir']], (i['x']+offset[temp_direc][0], i['y']+offset[temp_direc][1]))
             else:
                 self.screen.blit(self.snake_part[z][i['dir']], (i['x'], i['y']))
-
             if self.change:
                 self.snake_list[-1]['chng'] = '-'
                 self.change = False
             z -= 1
 
-    def update_snake(self, color):
-        pass
+    def update_snake(self):
+        scnd_last = self.snake_list[1]
+        self.snake_list.insert(1, scnd_last)
+        self.snake_part.insert(1, self.body)
 
     def get_snake(self):
-        """return copy of our move_list"""
-        pass
+        snake_cordinate = []
+        for i in self.snake_list:
+            cord = {'x':i['x'], 'y':i['y']}
+            snake_cordinate.append(cord)
+        return snake_cordinate
 
-    def get_pos(self, head=True):
-        """returns position if head==True and tail if head==False"""
-        if head:
-            return {'x':self.x, 'y':self.y}
-        else:
-            end_x = self.snake_list[-1][1][0]
-            end_y = self.snake_list[-1][1][1]
-            return {'x':end_x, 'y':end_y}
+    def self_collision(self):
+        """returns true if collision happens with itself"""
+        for v, i in enumerate(self.snake_list):
+            if v == len(self.snake_list)-1:
+                continue
+            if i['x'] == self.head_cord['x'] and i['y'] == self.head_cord['y']:
+                return True
+        return False
+
+    def is_collision(self, x, y):
+        """if snake head is collided with point at x, y"""
+        if x == self.head_cord['x'] and y == self.head_cord['y']:
+            return True
+        return False
 
     def turn_left_right(self, right=True):
         """move right by default"""
