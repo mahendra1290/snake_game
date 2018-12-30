@@ -1,5 +1,4 @@
 import pygame
-
 class Food:
     def __init__(self, size, screen_size):
         """initializing our food"""
@@ -16,3 +15,4 @@ class Food:
         self.x = x
         self.y = y
         pygame.draw.rect(surface, color, [self.x, self.y, self.width, self.height])
+
