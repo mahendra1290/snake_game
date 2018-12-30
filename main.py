@@ -56,30 +56,29 @@ run = True
 clock = pygame.time.Clock()
 
 def food_cordinate(food_check):
-    for i in range(1, len(food_check)):
+    not_get_food = True
+    while not_get_food:
         food_x = random.randint(0, 39)
         food_y = random.randint(0, 39)
         food_x *= 15
         food_y *= 15
-        if (food_x in range(food_check[i-1]['x'], food_check[i]['x'])) \
-        and (food_y in range(food_check[i-1]['y'], food_check[i]['y'])):    
-            continue
-        else:
+        get = True
+        for i in food_check:
+            if food_x ==  i['x'] and food_y == i['y']:
+                print("on snake")
+                get = False
+                break
+        if get:
             feed_color = random.choice(list(colors.keys()))
+            not_get_food = False
             return {'x': food_x, 'y':food_y, 'col':colors[feed_color]}
 while run:
+    win.fill((10, 10, 10))
     while game_cont:
         for event in pygame.event.get():
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE:
                     game_cont = False
-
-    win.fill((10, 10, 10))
-
-    if foods_1:
-        food_check = snakee.get_snake()
-        food_infom = {'x': 60, 'y':60, 'col':colors['blue']}
-        foods_1 = False
 
     for event in pygame.event.get():
         if event.type == pygame.KEYDOWN:
@@ -105,17 +104,20 @@ while run:
         if event.type == pygame.QUIT:
             run = False
             break
-    snakee.snake_move()
-    # if snakee.get_pos()['x'] == food_infom['x']  and snakee.get_pos()['y'] == food_infom['y']:
-    #     tempss = food_infom.copy()
-    #     foods_1 = True
-    # if foods_1 or not_touch:
-    #     not_touch = True
-    #     if snakee.get_pos(head=False)['x'] == tempss['x'] and snakee.get_pos(head=False)['y'] == tempss['y']:
-    #         not_touch = False
-    #         snakee.update_snake(tempss['col'])
-    #     pygame.draw.rect(win ,tempss['col'],[tempss['x'], tempss['y'], 7, 7])
-    #foodss.update_food(food_infom['col'], win, food_infom['x'], food_infom['y'])      
+
+    if foods_1:
+        food_check = snakee.get_snake()
+        food_detail = food_cordinate(food_check)
+        foods_1 = False
+
+    if snakee.is_collision(food_detail['x'], food_detail['y']):
+        snakee.update_snake()
+        foods_1 = True
+
+    foodss.update_food(food_detail['col'], win, food_detail['x'], food_detail['y'])
+    snakee.snake_move() 
+    if snakee.self_collision():
+        game_cont = True
     pygame.display.update()
     clock.tick(10)
 pygame.quit()
