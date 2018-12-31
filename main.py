@@ -1,5 +1,5 @@
 import pygame, os, time, random, snake, food
-
+print(os.listdir('snake_body') )
 pygame.init()
 width  = 600
 height = 600
@@ -18,6 +18,7 @@ colors = {
     'cyan'   : (156, 222, 254)
 }
 win    = pygame.display.set_mode((width, height))
+pygame.display.set_icon(pygame.image.load(os.path.join('snake_head', 'head_W.png')).convert_alpha())
 head = {'w':pygame.image.load(os.path.join('snake_head', 'head_W.png')).convert_alpha(),
         'e':pygame.image.load(os.path.join('snake_head', 'head_E.png')).convert_alpha(),
         'n':pygame.image.load(os.path.join('snake_head', 'head_N.png')).convert_alpha(),
