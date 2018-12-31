@@ -5,7 +5,6 @@ class Snake:
     head_direct  = {'x':0, 'y':0, 'dir':'e', 'chng':'-'}
     head_cord    = {'x':0, 'y':0, 'dir':'e', 'chng':'-'}
     snake_lenth  = 0
-    temp_direct  = 'e'
     change = False
     def __init__(self, screen, screen_size, speed, snake):
         self.head = snake['head']
@@ -58,8 +57,10 @@ class Snake:
                 offset = {'w':[-5, 0], 'e':[0, 0], 'n':[0, -5], 's':[0, 0]}
                 temp_direc = i['dir']
                 self.screen.blit(self.snake_part[z][i['dir']], (i['x']+offset[temp_direc][0], i['y']+offset[temp_direc][1]))
+
             else:
                 self.screen.blit(self.snake_part[z][i['dir']], (i['x'], i['y']))
+                
             if self.change:
                 self.snake_list[-1]['chng'] = '-'
                 self.change = False
