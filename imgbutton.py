@@ -24,31 +24,3 @@ class Button:
         if self.rect_on.collidepoint(z) and y[0] == 1:
             return True
         return False
-
-    def pos_check(self):
-        for event in pygame.event.get():
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_UP:
-                    print("up")
-                    self.rect_of.y -= 2
-                    self.rect_on.y -= 2
-                    break
-
-                if event.key == pygame.K_DOWN:
-                    print("down")
-                    self.rect_of.y += 2
-                    self.rect_on.y += 2
-                    break
-                
-                if event.key == pygame.K_LEFT:
-                    print("left")
-                    self.rect_of.x -= 2
-                    self.rect_on.x -= 2
-                    break
-                
-                if event.key == pygame.K_RIGHT:
-                    print("right")
-                    self.rect_of.x += 2
-                    self.rect_on.x += 2
-                    break
-        #print(self.rect_of, self.rect_on)
