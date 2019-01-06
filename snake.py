@@ -1,11 +1,14 @@
 import pygame
 class Snake:
-    snake_list = []
-    snake_part = []
+
+    snake_list = []               #snake parts coordinate and direction list
+    snake_part = []               #snake images list 
     head_direct  = {'x':0, 'y':0, 'dir':'e', 'chng':'-'}
     head_cord    = {'x':0, 'y':0, 'dir':'e', 'chng':'-'}
+    #chng is for corners images according to change in direction 
     snake_lenth  = 0
     change = False
+
     def __init__(self, screen, screen_size, speed, snake):
         self.head = snake['head']
         self.tail = snake['tail']
@@ -17,19 +20,21 @@ class Snake:
         self.snake_part.append(self.head)
         self.snake_list.append(self.head_cord)
         self.snake_lenth += 1
+        Snake.head_cord['x'] = self.speed
 
-        for i in range(1, 2):
+        for i in range(2, 3):
             temp = {'x':-self.speed*i, 'y':0, 'dir':'e', 'chng':'-'}
             self.snake_list.append(temp)
             self.snake_part.append(self.body)
             self.snake_lenth += 1
 
-        temp = {'x':-self.speed*2, 'y':0, 'dir':'e', 'chng':'-'}
+        temp = {'x':-self.speed*3, 'y':0, 'dir':'e', 'chng':'-'}
         self.snake_list.append(temp)
         self.snake_part.append(self.tail)
         self.snake_lenth += 1
         
     def snake_move(self):
+        """main method to move main"""
         self.head_cord['x']  += self.head_direct['x']
         self.head_cord['y']  += self.head_direct['y']
         self.head_cord['dir'] = self.head_direct['dir']
@@ -72,6 +77,7 @@ class Snake:
         self.snake_part.insert(1, self.body)
 
     def get_snake(self):
+        """returns current snake state"""
         snake_cordinate = []
         for i in self.snake_list:
             cord = {'x':i['x'], 'y':i['y']}
@@ -86,6 +92,10 @@ class Snake:
             if i['x'] == self.head_cord['x'] and i['y'] == self.head_cord['y']:
                 return True
         return False
+
+    def get_head(self):
+        """returns dictionary of snake head coordinate"""
+        return {'x':self.head_cord['x'], 'y':self.head_cord['y']}
 
     def is_collision(self, x, y):
         """if snake head is collided with point at x, y"""
